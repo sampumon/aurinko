@@ -1,0 +1,10 @@
+#!/bin/bash
+# usage: $0 *.jpg
+# generates thumbnails if missing
+# for input use: *[^s].jpg
+
+for f in $*; do
+	# TODO: these shouldn't be here
+	thumb=${f%.jpg}s.jpg
+	[ -f $thumb ] || convert $f -scale 64x $thumb
+done

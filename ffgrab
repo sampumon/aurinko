@@ -1,0 +1,5 @@
+# ffmpeg webcam capture
+# -s is needed, -r could maybe be overridden
+# output ideas: %04s.jpg / a.vob / -vcodec libx264 a.mp4
+
+ffmpeg -f video4linux2 -s 1280x1024 -i /dev/video0 -r 0.1 $*

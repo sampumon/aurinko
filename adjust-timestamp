@@ -1,0 +1,10 @@
+#!/bin/bash
+# usage: $0 "n hours ago" files
+# quick-adjust time stamps
+
+parsed="$1"
+shift
+
+for f in $*; do
+	touch -d "$parsed" -r $f $f
+done

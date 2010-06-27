@@ -1,0 +1,14 @@
+#!/bin/bash
+# usage: $0 files
+# mogrify and re-touch file
+
+# ecport mogrify_options="-your own stuff"
+[ "$mogrify_options" ] || mogrify_options="-scale 640x480! -quality 85"
+echo using options: $mogrify_options > /dev/stderr
+
+for f in $*; do
+	touch -r $f /tmp/touch.temp
+	echo $((++i))/$# $f > /dev/stderr
+	mogrify $mogrify_options $f
+	touch -r /tmp/touch.temp $f
+done

@@ -1,0 +1,21 @@
+#!/bin/bash
+# usage: $0 orig-image [thumb-image]
+# will output html [a]+img elements for given image file pair
+# NOTE: run in the directory where the output html will reside!
+# TODO: parse directories as relative to output html file?
+
+# NOTE: date -r and du -h are about as fast, both faster than ls,
+# but we want time stamp _and_ size, for which ls is faster
+read rwx links user group size date time name < <(ls -lh $1)
+stamp="$date $time"
+
+# old-note: awk and cut are about as fast, read is a bit faster
+# stamp=$(ls -l $1 | awk '{print $6, $7}')
+# size=$(du -h $1 | cut -f1)
+
+# TODO: how to allow line feed in html without whitespace rendering?
+# SOLUTION: css character-spacing: 0!
+# TODO: get average brightness level for alt attribute?
+
+[ ! $2 ] && echo -ne "<img title=\"$stamp\" alt=\"$size\" src=\"$1\"\n/>" \
+|| echo -ne "<a title=\"$stamp\" href=\"$1\"><img alt=\"$size\" src=\"$2\"\n/></a>"

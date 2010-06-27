@@ -1,0 +1,5 @@
+#!/bin/bash
+# usage: $0 out.ogv [ffmpeg2theora-options]
+# encode jpg files coming from a pipe to ogg theora
+
+ffmpeg2theora -f mjpeg -x 640 -y 480 -v 7 -o $* -

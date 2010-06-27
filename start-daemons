@@ -1,0 +1,20 @@
+# TODO
+
+# make ffmpeg output directory
+mkdir ff-out
+
+# listen for ffmpeg images, copy to proper html directory
+# todo: rename/move here as yyyymmdd/hhmm-n?
+./wait-copy ff-out html-in
+
+# listen for copied images, convert to thumbnails and append html body
+cd html-root
+../wait-convert html-in ../html-img >> html-body
+
+# grab webcam, does filename numbering matter?
+# todo: resize to 640x480, from camera or after grab?
+ffmpeg -f video4linux2 -s 1280x1024 -i /dev/video0 -r 0.1 ff-out/%06d.jpg
+
+# convert to theora, pipe images so that encoding blocks?
+# todo: restart when day changes
+ffmpeg2theora ff-out/%06d.jpg -x 640 -y 480 -v 7 -o one-day.ogv

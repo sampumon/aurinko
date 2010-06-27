@@ -1,0 +1,18 @@
+#!/bin/bash
+# usage: $0 in-dir [out-dir]
+# copies incoming files (mod 6) from in-dir to out-dir
+# (outputs debug stats to stderr)
+
+# make missing out-dir
+[ $2 ] && mkdir -p $2
+
+inotifywait -me close_write $1 | while read dir event file; do
+(( counter++ % 6 )) || {
+	# inotifywait always appends / to dir
+	in=$dir$file
+	out=${2:-.}
+	#out=${2:+${2%/}/}$file
+
+	echo $counter $in-\>$out > /dev/stderr
+	cp -p $in $out
+} done

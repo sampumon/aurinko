@@ -1,0 +1,22 @@
+#!/bin/bash
+# usage: $0 [-n] files
+# revocer file timstamps from filename and containing dir
+# format dir/file.ext: yyyymmdd/HHMMSS.ext
+
+fmt=+"%Y%m%d%H%M.%S"
+
+[ "$1" == "-n" ] && {
+	notouch=true
+	shift
+}
+
+for f in $*; do
+	olddate=$(date -r $f $fmt)
+	ext=$(echo $f | grep -o "\.[^\./]*$")
+	dir=$(readlink -f $f | awk -F / '{print $(NF-1)}')
+	time=${f%$ext}
+	date=${dir:0:8}
+	stamp=$date${time:0:4}.${time:4:2}
+	echo $f $olddate-\>$stamp > /dev/stderr
+	[ $notouch ] || touch -t $stamp $f
+done

@@ -1,0 +1,8 @@
+#!/bin/bash
+# usage: $0 n [files-and-ls-options]
+# list every nth file [from current directory]
+
+n=${1:-1}
+shift
+
+ls $* | awk "(NR-1)%$n==0"

@@ -1,0 +1,31 @@
+#!/bin/bash
+# usage: $0 files
+# rename and redir files to their timestamp as date/time.ext
+# will not overwrite duplicates, uses running counter
+
+# default format, see man date (all this also needs gnu date)
+fmt=+"%Y%m%d/%H%M%S"
+
+for f in $*; do
+	# base=$(echo $f | sed "s/[^\.]*$//")
+	ext=$(echo $f | grep -o "\.[^\./]*$")
+	base=${f%$ext}
+	date=$(date -r $f $fmt)
+	out=$date$ext
+
+	# don't overwrite possibly exiting files, add running counter
+	# warning: if there are o lot of files with same date, this will take O(n^2) time!
+	declare -i n=0
+	while [ -e $out ]; do
+		n+=1
+		out=$date-$n$ext
+	done
+
+	# make missing output directory
+	dir=$(dirname $out)
+	mkdir -p $dir
+
+	# DO THE YES THING
+	echo mv -n $f $out > /dev/stderr
+	mv -n $f $out
+done

@@ -1,0 +1,23 @@
+#!/bin/bash
+# usage: ffwait in-dir out-dir
+# copies incoming files (mod 6) from in-dir to out-dir
+# and outputs html a+img to stdout (stats to stderr)
+
+# make missing out-dir
+[ $2 ] && mkdir -p $2
+
+inotifywait -me close_write $1 | while read dir event file; do
+(( counter++ % 6 )) || {
+	echo -n $counter $file... > /dev/stderr
+	# inotifywait always appends / to dir
+	in=$dir$file
+	out=${2:+${2%/}/}$file
+	outs=${out%.jpg}s.jpg
+	stamp=$(ls -l $in | awk '{print $6, $7}')
+
+	cp $in $out
+	convert $out -scale 64x $outs
+
+	echo $out > /dev/stderr
+	echo -n "<a href=\"$out\"><img title=\"$stamp\"src=\"$outs\" /></a>"
+} done

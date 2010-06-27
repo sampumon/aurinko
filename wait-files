@@ -1,0 +1,17 @@
+#!/bin/bash
+# usage: $0 indir [callback [options]]
+# executes "callback file" for incoming files and dirs [default echo]
+# will listen indir and its (newly created) subdirs recursively
+
+indir=$1
+shift
+
+inotifywait -mr -e close_write -e moved_to -e create $indir \
+| while read dir event file; do
+	# skip create events for non-directories
+	# (there will be close_write for files)
+	[ $event == CREATE ] && continue
+	# inotifywait always appends / to dir
+	in=$dir$file
+	${*:-echo} $in
+done

@@ -1,0 +1,27 @@
+#!/bin/bash
+# usage: $0 incoming-dir [out-dir]
+# live-encode incoming-dir/new-dir/*.jpg as [out-dir/]new-dir.ogv
+
+indir=$1
+outdir=${2:-.}
+
+# TODO: refactor [-r] to wait-files instead
+inotifywait -me create $indir \
+| while read dir event file; do
+
+	in=$dir$file
+
+	# skip non-directories
+	[ -d $in ] || continue
+
+	outfile=$file.ogv
+	out=$outdir/$outfile
+
+	echo NOW ENCODING: $in -\> $out > /dev/stderr
+
+	# start video encode magic!
+	# TODO: $! isn't the correct pid to kill when done :/
+	# neither is the next wait-files (duplicate), nor fftheora-pipe
+	# BUT: inotifywait (pid $!+6) is! need to get its pid :o
+	wait-files $in cat | fftheora-pipe $out &> $outdir/fftheora.$! &
+done

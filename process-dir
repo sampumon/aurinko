@@ -1,0 +1,5 @@
+#!/bin/bash
+# usage: $0 dir [n]
+# temp directory thumbnailer, thumbnails and html-outputs every nth image [all images]
+
+ls-nth ${2:-1} ${1:-.}/* | xargs process-images $1

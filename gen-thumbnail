@@ -1,0 +1,23 @@
+#!/bin/bash
+# usage: $0 [outdir] files
+# creates a 64x thumbnail for files into outdir [or as file's sibling]
+# WARNING: if outdir is specified, but is same as file's dir,
+# file will be overwritten
+
+# string to inject into thumbnail filename, when no outdir
+th=s
+
+if [ -d $1 ]; then
+	outdir=$1
+	shift
+fi
+
+for f in $*; do
+	ext=$(echo $f | grep -o "\.[^\./]*$")
+	base=$(basename $f $ext)
+	dir=$(dirname $f)
+	[ $outdir ] && out=$outdir/$base$ext || out=$dir/$base$th$ext
+
+	echo $f -\> $out > /dev/stderr
+	convert $f -scale 64x $out
+done

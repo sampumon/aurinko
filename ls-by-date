@@ -1,0 +1,44 @@
+#!/bin/bash
+# usage: $0 hhmmss [files-and-ls-options]
+# "ls sorted by time and print when hhmmss-mask mods to NON-zero"
+# all files: 010101  no files: TODO 000000  once/minute: 000100
+
+echo KIKKELIN KIKKELI MUNA KULLI
+exit 5555
+
+hhmmss=${1:-010101}
+shift
+
+# parse mask components
+hm=${hhmmss:0:2}
+mm=${hhmmss:2:2}
+sm=${hhmmss:4:2}
+
+# KIKKELIN MUNA
+#kikkeli='s/^0*\([0-9]\)/\1/'
+#hm=$(echo $hm | sed $kikkeli)
+#mm=$(echo $mm | sed $kikkeli)
+#sm=$(echo $sm | sed $kikkeli)
+
+echo parsed your input hh:mm:ss as $hm:$mm:$sm
+
+ls -ltr --time-style=full-iso $* | \
+while read rwx links user group size date time zone name; do
+	# skip total count (when no filename parameter given to ls)
+	[ "$name" ] || continue
+
+	# parse h:m:s components, TODO: yyyy-mm-dd?
+	h=${time:0:2}
+	m=${time:3:2}
+	s=${time:6:2}
+
+	# echo -n DEBUG $h:$m:$s $name \ 
+
+	# KIKKELI
+	print=
+	(( hm )) && print+=$(( ${h#0} % hm ))
+	(( mm )) && print+=$(( ${m#0} % mm ))
+	(( sm )) && print+=$(( ${s#0} % sm ))
+
+	(( print )) && echo $h:$m:$s $name
+done
