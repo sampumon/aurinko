@@ -1,0 +1,22 @@
+# TODO usage: start-daemons [path-to-aurinko]
+
+# add scripts to path?
+
+# make ffmpeg output directory
+mkdir au-in
+
+# listen for ffmpeg images, move them to i/yyyymmdd/hhmmss.jpg
+pushd i
+wait-files au-in rename-date &
+popd
+
+# listen for copied images, convert to thumbnails and append html body
+# cd html-root
+# ../wait-convert html-in ../html-img >> html-body
+
+# grab webcam (once per 10 seconds)
+ffgrab au-in/%06.jpg
+
+# convert to theora, pipe images so that encoding blocks?
+# todo: restart when day changes
+# ffmpeg2theora ff-out/%06d.jpg -x 640 -y 480 -v 7 -o one-day.ogv
