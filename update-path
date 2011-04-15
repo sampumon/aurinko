@@ -1,11 +1,8 @@
-# usage: . $0
+# usage: . path/to/$0
 # update path to include directory containing $0 (and all the other scripts)
-# NOTE: does not work as ./$0, as path is not inherited to parent shell!
+# NOTE: does not work as path/to/$0 (without . dot), as path is not inherited to parent shell!
 
-# TODO: how to do it?
-#echo DEBUG: $0 $*
-#me=$(dirname $(readlink -f $0))
-#echo WONT WORK: $me
-me=~/Videot/aurinko
-echo WILL USE: $me
+#me=~/Videot/aurinko/scripts
+me=$(dirname $(readlink -f $BASH_SOURCE))
+echo PATH+=:$me
 PATH+=:$me

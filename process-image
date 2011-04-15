@@ -1,0 +1,45 @@
+#!/bin/bash
+# usage: $0 image-file|dir
+# processes incoming image file or directory
+# NOTE: other scripts need be in path
+
+# original->thumbnail/video rename sed regexp magic
+thre=s/^i/s/
+vre=s/^i/v/
+
+# $0 outfile
+mk-outdir () {
+	# NOTE: outdir is available out of function, too
+	outdir=$(dirname $1)
+	mkdir -p $outdir
+}
+
+f="$1"
+shift
+
+if [ ! -d $f ]; then
+	# f is image-file
+	out=$(echo $f | sed $thre)
+	mk-outdir $out
+	# $outdir comes from mk-outdir
+
+	# check if thumbnail already exists and skip regenerating it
+	[ -e $out ] || gen-thumbnail $outdir $f
+	html-img $f $out
+else
+	# f is just-created directory
+	echo "<br />"
+	# TODO: on new day first image, insert margin-left if not at midnight?
+
+	# on new day, start a new video and insert <video>
+	out=$(echo $f | sed $vre).ogv
+	mk-outdir $out
+	html-video $out
+
+	echo NOW ENCODING: $f -\> $out > /dev/stderr
+
+	# start encoding video!
+	# TODO and stop previous day :)
+	wait-files $f cat | fftheora-pipe $out &> $outdir/fftheora.$! &
+	echo $$ / $! > /dev/stderr
+fi
