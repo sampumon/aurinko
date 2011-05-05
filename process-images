@@ -1,0 +1,5 @@
+#!/bin/bash
+# usage: $0 image-files-and-dirs
+# processes incoming image files and directories
+
+for f; do process-image $f; done

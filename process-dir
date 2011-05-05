@@ -2,4 +2,5 @@
 # usage: $0 dir [n]
 # temp directory thumbnailer, thumbnails and html-outputs every nth image [all images]
 
-ls-nth ${2:-1} ${1:-.}/* | xargs process-image $1
+# add process-images $1 to start video encode and stuff
+ls-nth ${2:-1} ${1:-.}/* | xargs process-images

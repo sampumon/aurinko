@@ -1,8 +1,10 @@
 #!/bin/bash
 # usage: $0 dir [mencoder-options]
-# encodes all jpg files in dir as mjpeg-avi
+# encodes all jpg files in dir as mjpeg-avi (dir.avi)
 
-dir=${1##*/}
+in=$1/*.jpg
+out=${1%/}
+out=${out##*/}.avi
 shift
 
-echo mencoder "mf://$dir/*.jpg" -mf fps=25 -ovc copy -o $dir.avi $*
+mencoder "mf://$in" -mf fps=25 -ovc copy -o $out $*

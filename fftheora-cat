@@ -2,7 +2,9 @@
 # usage: $0 dir [ffmpeg2theora-options]
 # encode jpg files in dir to ogg theora, as dir.ogv
 
-dir=${1##*/}
+in=$1/*.jpg
+out=${1%/}
+out=${out##*/}.ogv
 shift
 
-cat $dir/*.jpg | ffmpeg2theora -f mjpeg -x 640 -y 480 -v 7 $* -o $dir.ogv -
+cat $in | ffmpeg2theora -f mjpeg -x 640 -y 480 -v 7 $* -o $out -
