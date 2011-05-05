@@ -16,5 +16,5 @@ stamp="$date $time"
 # NOTE: css needs to disable whitespace rendering between images
 # CRAZYTODO: get average brightness level for alt attribute?
 
-[ ! $2 ] && echo -ne "<img title=\"$stamp\" alt=\"$size\" src=\"$1\" />\n" \
-|| echo -ne "<a title=\"$stamp\" href=\"$1\"><img alt=\"$size\" src=\"$2\" /></a>\n"
+[ ! $2 ] && echo "<img title=\"$stamp\" alt=\"$size\" src=\"$1\" />" \
+|| echo "<a title=\"$stamp\" href=\"$1\"><img alt=\"$size\" src=\"$2\" /></a>"
