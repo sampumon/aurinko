@@ -13,9 +13,8 @@ stamp="$date $time"
 # stamp=$(ls -l $1 | awk '{print $6, $7}')
 # size=$(du -h $1 | cut -f1)
 
-# TODO: how to allow line feed in html without whitespace rendering?
-# SOLUTION: css character-spacing: 0!
-# TODO: get average brightness level for alt attribute?
+# NOTE: css needs to disable whitespace rendering between images
+# CRAZYTODO: get average brightness level for alt attribute?
 
-[ ! $2 ] && echo -ne "<img title=\"$stamp\" alt=\"$size\" src=\"$1\"\n/>" \
-|| echo -ne "<a title=\"$stamp\" href=\"$1\"><img alt=\"$size\" src=\"$2\"\n/></a>"
+[ ! $2 ] && echo -ne "<img title=\"$stamp\" alt=\"$size\" src=\"$1\" />\n" \
+|| echo -ne "<a title=\"$stamp\" href=\"$1\"><img alt=\"$size\" src=\"$2\" /></a>\n"
